@@ -1,0 +1,36 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{AB0D92F7-44C4-461B-828B-883EFFDB5FB8}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="raskroiAddIn.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="raskroiAddIn">
+        <MSBuild Projects="raskroiAddIn.dproj"/>
+    </Target>
+    <Target Name="raskroiAddIn:Clean">
+        <MSBuild Projects="raskroiAddIn.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="raskroiAddIn:Make">
+        <MSBuild Projects="raskroiAddIn.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="raskroiAddIn"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="raskroiAddIn:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="raskroiAddIn:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>
