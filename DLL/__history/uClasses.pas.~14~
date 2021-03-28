@@ -298,8 +298,7 @@ type
     procedure ReCalcLeftTopPositionForRectangles;
     procedure AutoCalcOriginalHeight;
 
-    function SerializedSchema:string;
-    procedure UnSerializeSchema(jsonSchema);
+    function serializedSchema:string;
   end;
 
 implementation
@@ -2440,15 +2439,6 @@ begin
   end;
 
   Result:=json.ToString;
-
-end;
-
-
-procedure THolstImage.UnSerializeSchema(jsonSchema:string);
-
-begin
-   jsonValue:=TJSONObject.ParseJSONValue(jsonSchema,False,True).AsType;
-
 
 end;
 

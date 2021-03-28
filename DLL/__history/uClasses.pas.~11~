@@ -298,8 +298,7 @@ type
     procedure ReCalcLeftTopPositionForRectangles;
     procedure AutoCalcOriginalHeight;
 
-    function SerializedSchema:string;
-    procedure UnSerializeSchema(jsonSchema);
+     function serializeSchema:string;
   end;
 
 implementation
@@ -2354,12 +2353,11 @@ begin
 end;
 
 
-function THolstImage.serializedSchema:string;
+function THolstImage.serializeSchema:string;
 var
   json,jsonRectangle,jsonCutline,jsonVertCutLine,jsonNested: TJsonObject;
   jsonRectangles,jsonCutlines,jsonVertCutLines: TJSONArray;
   i: integer;
-
 begin
 
    json:= TJSONObject.Create;
@@ -2381,7 +2379,7 @@ begin
        jsonRectangle.AddPair('FScaledHeight',FloatToStr(FRectangles[i].FScaledHeight));
        jsonRectangle.AddPair('FResizable',BoolToStr(FRectangles[i].FResizable));
        jsonRectangle.AddPair('FRotated',BoolToStr(FRectangles[i].FRotated));
-       jsonRectangle.AddPair('FrectangleType',IntToStr(ord(FRectangles[i].FrectangleType)));
+       jsonRectangle.AddPair('FrectangleType',ToString(FRectangles[i].FrectangleType));
 
        jsonRectangles.AddElement(jsonRectangle);
        jsonRectangle.Destroy;
@@ -2400,8 +2398,8 @@ begin
          jsonCutline.AddPair('FName',FCutLines[i].FName);
 
          jsonNested:=TJSONObject.Create;
-         jsonNested.AddPair('x',IntToStr(FCutLines[i].FBeginPoint.X));
-         jsonNested.AddPair('y',IntToSTr(FCutLines[i].FBeginPoint.Y));
+         jsonNested.AddPair('x',FCutLines[i].FBeginPoint.X);
+         jsonNested.AddPair('y',FCutLines[i].FBeginPoint.Y);
          jsonCutline.AddPair('FBeginPoint',jsonNested);
          jsonNested.Destroy;
 
@@ -2439,15 +2437,7 @@ begin
       jsonCutlines.Destroy;
   end;
 
-  Result:=json.ToString;
 
-end;
-
-
-procedure THolstImage.UnSerializeSchema(jsonSchema:string);
-
-begin
-   jsonValue:=TJSONObject.ParseJSONValue(jsonSchema,False,True).AsType;
 
 
 end;

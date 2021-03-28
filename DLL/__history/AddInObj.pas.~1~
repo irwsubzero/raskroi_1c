@@ -16,7 +16,6 @@ resourcestring
    strOpen='Open,ќткрыть';
    strImage='Image,Ёскиз';
    strDefectArea='DefectArea,Ѕракованна€ќбласть';
-   strSerializedSchema='SerializedSchema,—хема–аскро€';
 
 
      (*1*)
@@ -35,8 +34,7 @@ resourcestring
        propUsefulPieces,
        propDefectPieces,
        propImage,
-       propDefectArea,
-       propSerializedSchema
+       propDefectArea
      );
 
 ////////////////////////////////////////////////////////////////////////
@@ -86,7 +84,6 @@ type
      FImageData:string;
      FDefectArea:double; // ѕлощадь бракованной области
      //FUseFulPieces:TRectangles;
-     FSerializedSchema:string;
 
     { This function is useful in ILanguageExtender implementation }
 		function TermString(strTerm: string; iAlias: Integer): string;
@@ -241,10 +238,6 @@ begin
               // ѕлощадь бракованной области
               pvarPropVal:= FDefectArea;
             end;
-            propSerializedSchema: begin
-               // строка json со схемой дл€ сохранени€
-               pvarPropVal:= FSerializedSchema;
-            end;
             (*5*)
             else
                Result := S_FALSE;
@@ -309,9 +302,6 @@ begin
             propDefectPieces: begin
             end;
 
-            propSerializedSchema:begin
-               FSerializedSchema:=varPropVal;
-            end;
             (*6*)
             else
               Result := S_FALSE;
@@ -406,9 +396,6 @@ begin
 
                     FDefectArea:=DefectArea;
 
-                    //—оздаем схему раскро€ JSON и записываем
-                    FSerializedSchema:= img_main.serializedSchema;
-
                     pvarRetValue:=True;
                  end
                  else
@@ -464,8 +451,7 @@ begin
    else if CompareCommand(bstrPropName, strUsefulPieces) then plPropNum := Integer(propUsefulPieces)
    else if CompareCommand(bstrPropName, strDefectPieces) then plPropNum := Integer(propDefectPieces)
    else if CompareCommand(bstrPropName, strDefectArea) then plPropNum := Integer(propDefectArea)
-   else if CompareCommand(bstrPropName, strImage) then plPropNum := Integer(propImage)
-   else if CompareCommand(bstrPropName, strSerializedSchema) then plPropNum := Integer(propSerializedSchema);
+   else if CompareCommand(bstrPropName, strImage) then plPropNum := Integer(propImage);
    (*8*)
 
    if (plPropNum = -1) then begin

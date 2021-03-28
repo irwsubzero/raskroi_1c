@@ -5,7 +5,7 @@ interface
 uses
   Vcl.ExtCtrls, Vcl.Controls, SysUtils, Vcl.graphics, System.Classes,
   Vcl.Dialogs,
-  System.Types, System.Math, Messages, Winapi.Windows;
+  System.Types, System.Math, Messages, Winapi.Windows,System.JSON;
 
 const
   ResizeLimit = 0.1;
@@ -179,6 +179,8 @@ type
     property Count: integer read FCount;
     property Rectangle[index: integer]: TCustomRectangle read getItem
       write setItem; default;
+
+
   end;
 
   THolstImage = class(TImage)
@@ -295,6 +297,8 @@ type
 
     procedure ReCalcLeftTopPositionForRectangles;
     procedure AutoCalcOriginalHeight;
+
+     function serializeSchema:string;
   end;
 
 implementation
@@ -569,6 +573,9 @@ begin
   FCount := FCount - 1;
   setLength(Fitems, FCount)
 end;
+
+
+
 
 { TCutLines-------------------------------------------------------------------- }
 
@@ -1155,15 +1162,24 @@ begin
       Canvas.Brush.Color:=clWhite;
       Canvas.Pen.Color := clRed;
       // Canvas.Font.Size:=round(FRectangles[i].FScale*2);
-      Canvas.Font.Size := round(FScale * 80);
 
-      Canvas.TextOut(FRectangles[i].FLeft +
-        round((FRectangles[i].FRight - FRectangles[i].FLeft) / 2),
-        FRectangles[i].FTop + 5,
+      Canvas.Font.Size := round(FScale * 70);
+
+//      Canvas.TextOut(FRectangles[i].FLeft +
+//        round((FRectangles[i].FRight - FRectangles[i].FLeft) / 2),
+//        FRectangles[i].FTop + 5,
+//        Floattostr(FRectangles[i].OriginalWidth) + 'м');
+//      Canvas.TextOut(FRectangles[i].FLeft + 5, FRectangles[i].FTop +
+//        round((FRectangles[i].FBottom - FRectangles[i].FTop) / 2),
+//        Floattostr(FRectangles[i].OriginalHeight) + 'м');
+
+      Canvas.TextOut(FRectangles[i].FLeft + 2,FRectangles[i].FTop + 2,
         Floattostr(FRectangles[i].OriginalWidth) + 'м');
-      Canvas.TextOut(FRectangles[i].FLeft + 5, FRectangles[i].FTop +
-        round((FRectangles[i].FBottom - FRectangles[i].FTop) / 2),
+
+      Canvas.TextOut(FRectangles[i].FLeft + 2, FRectangles[i].FTop + round(FScale*110),
+
         Floattostr(FRectangles[i].OriginalHeight) + 'м');
+
 
       Canvas.Pen.Color := clBlack;
 
@@ -2332,6 +2348,42 @@ begin
       toppos := round((FRectangles[i].FTop) / FScale);
       FRectangles[i].FLeftotstup := leftpos;
       FRectangles[i].FTopOtstup := toppos;
+    end;
+
+end;
+
+
+function THolstImage.serializeSchema:string;
+var
+  json,jsonRectangle,jsonCutline,jsonVertCutLines: TJsonObject;
+  jsonRectangles: TJSONArray;
+  i: integer;
+begin
+
+
+  jsonRectangles = TJSOnArray.Create;
+
+  if FRectangles.Count>0 then
+
+
+    for i := 0 to FCount-1 do begin
+       jsonRectangle:= TJSONObject.Create;
+       jsonRectangle.AddPair("");
+
+  //     FLeftotstup: integer;  // Left  позиция относительно холста  в мм
+  //    FTopOtstup: integer;   // Top позиция относительно холста    в  мм
+  //    FLeft: integer;
+  //    FTop: integer;
+  //    FRight: integer;
+  //    FBottom: integer;
+  //    FScaledWidth: double;
+  //    FScaledHeight: double;
+  //    FResizable: boolean;
+  //    FRotated : boolean; // флаг что кусок был повернут, чтобы вернуть в 1с не поменялись размеры местами
+  //    {*} FrectangleType:TRectangleType;
+
+
+       jsonArray.AddElement(jsonRectangle);
     end;
 
 end;

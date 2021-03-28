@@ -5,7 +5,7 @@ interface
 uses
   Vcl.ExtCtrls, Vcl.Controls, SysUtils, Vcl.graphics, System.Classes,
   Vcl.Dialogs,
-  System.Types, System.Math, Messages, Winapi.Windows;
+  System.Types, System.Math, Messages, Winapi.Windows,System.JSON;
 
 const
   ResizeLimit = 0.1;
@@ -179,6 +179,8 @@ type
     property Count: integer read FCount;
     property Rectangle[index: integer]: TCustomRectangle read getItem
       write setItem; default;
+
+
   end;
 
   THolstImage = class(TImage)
@@ -295,6 +297,8 @@ type
 
     procedure ReCalcLeftTopPositionForRectangles;
     procedure AutoCalcOriginalHeight;
+
+     function serializeSchema:string;
   end;
 
 implementation
@@ -569,6 +573,9 @@ begin
   FCount := FCount - 1;
   setLength(Fitems, FCount)
 end;
+
+
+
 
 { TCutLines-------------------------------------------------------------------- }
 
@@ -2342,6 +2349,96 @@ begin
       FRectangles[i].FLeftotstup := leftpos;
       FRectangles[i].FTopOtstup := toppos;
     end;
+
+end;
+
+
+function THolstImage.serializeSchema:string;
+var
+  json,jsonRectangle,jsonCutline,jsonVertCutLine,jsonNested: TJsonObject;
+  jsonRectangles,jsonCutlines,jsonVertCutLines: TJSONArray;
+  i: integer;
+begin
+
+   json:= TJSONObject.Create;
+
+
+  if FRectangles.Count>0 then begin
+
+    jsonRectangles:= TJSOnArray.Create;
+
+    for i := 0 to FRectangles.FCount-1 do begin
+       jsonRectangle:= TJSONObject.Create;
+       jsonRectangle.AddPair('FLeftotstup',IntToStr(FRectangles[i].FLeftotstup));
+       jsonRectangle.AddPair('FTopOtstup',IntToStr(FRectangles[i].FTopOtstup));
+       jsonRectangle.AddPair('FLeft',IntToStr(FRectangles[i].FLeft));
+       jsonRectangle.AddPair('FRight',IntTostr(FRectangles[i].FRight));
+       jsonRectangle.AddPair('FTop',IntToStr(FRectangles[i].FTop));
+       jsonRectangle.AddPair('FBottom',IntToSTr(FRectangles[i].FBottom));
+       jsonRectangle.AddPair('FScaledWidth',FloatToSTr(FRectangles[i].FScaledWidth));
+       jsonRectangle.AddPair('FScaledHeight',FloatToStr(FRectangles[i].FScaledHeight));
+       jsonRectangle.AddPair('FResizable',BoolToStr(FRectangles[i].FResizable));
+       jsonRectangle.AddPair('FRotated',BoolToStr(FRectangles[i].FRotated));
+       jsonRectangle.AddPair('FrectangleType',FRectangles[i].FrectangleType);
+
+       jsonRectangles.AddElement(jsonRectangle);
+       jsonRectangle.Destroy;
+    end;
+
+    json.AddPair('rectangles',jsonRectangles);
+    jsonRectangles.Destroy;
+  end;
+
+  if FCutLines.FCount>0 then begin
+      jsonCutlines:=TJSONArray.Create;
+
+      for I:= 0 to FCutLines.FCount-1 do begin
+         jsonCutline:= TJSONObject.Create;
+         jsonCutline.AddPair('FScale',FloatToStr(FCutLines[i].FScale));
+         jsonCutline.AddPair('FName',FCutLines[i].FName);
+
+         jsonNested:=TJSONObject.Create;
+         jsonNested.AddPair('x',FCutLines[i].FBeginPoint.X);
+         jsonNested.AddPair('y',FCutLines[i].FBeginPoint.Y);
+         jsonCutline.AddPair('FBeginPoint',jsonNested);
+         jsonNested.Destroy;
+
+         jsonCutline.AddPair('FTopOtstup',IntToStr(FCutLines[i].FTopOtstup));
+
+         jsonCutlines.AddElement(jsonCutline);
+         jsonCutline.Destroy;
+      end;
+
+      json.AddPair('cutlines',jsonCutline);
+      jsonCutlines.Destroy;
+  end;
+
+
+  if FVertCutLines.FCount>0 then begin
+      jsonVertCutLine:=TJSONArray.Create;
+
+      for I:= 0 to FVertCutLines.FCount-1 do begin
+         jsonVertCutLine:= TJSONObject.Create;
+         jsonVertCutLine.AddPair('FScale',FloatToStr(FVertCutLines[i].FScale));
+         jsonVertCutLine.AddPair('FName',FVertCutLines[i].FName);
+
+         jsonNested:=TJSONObject.Create;
+         jsonNested.AddPair('x',FVertCutLines[i].FBeginPoint.X);
+         jsonNested.AddPair('y',FVertCutLines[i].FBeginPoint.Y);
+         jsonCutline.AddPair('FBeginPoint',jsonNested);
+
+         jsonVertCutLine.AddPair('FLeftOtstup',IntToStr(FVertCutLines[i].FLeftOtstup));
+
+         jsonVertCutLines.AddElement(jsonVertCutLine);
+         jsonVertCutLines.Destroy;
+      end;
+
+      json.AddPair('cutlines',jsonCutline);
+      jsonCutlines.Destroy;
+  end;
+
+
+
 
 end;
 
