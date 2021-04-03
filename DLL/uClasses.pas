@@ -215,6 +215,7 @@ type
 
     //19.01.2019 не рисовать зеленым цветом текущий  усок “кани
     FDoNotPaintOverCurrentRectangle:boolean;
+    FSerializedSchema:string;
 
     procedure SetScale(Value: double);
 
@@ -230,6 +231,7 @@ type
     // function OuterSects(Rect1:TCustomRectangle;Rect:TRect):boolean;
     function OuterSectsContur(Rect1, Rect2: TRect): boolean;
     function _IntersectRect(const Rect1, Rect2: TRect): boolean;
+    procedure SerializeSchema(Value:string);
 
   public
     constructor Create(aOwner: TComponent); override;
@@ -293,13 +295,14 @@ type
 
     property DoNotPaintOverCurrentRectangle:boolean read FDoNotPaintOverCurrentRectangle
       write FDoNotPaintOverCurrentRectangle;
+    property SerializedSchema:string read FSerializedSchema write SerializeSchema;
 
 
     procedure ReCalcLeftTopPositionForRectangles;
     procedure AutoCalcOriginalHeight;
 
-    function SerializedSchema:string;
-    procedure UnSerializeSchema(jsonSchema);
+//    function SerializeSchema:string;
+    procedure UnSerializeSchema;
   end;
 
 implementation
@@ -2354,7 +2357,7 @@ begin
 end;
 
 
-function THolstImage.serializedSchema:string;
+procedure THolstImage.serializeSchema;
 var
   json,jsonRectangle,jsonCutline,jsonVertCutLine,jsonNested: TJsonObject;
   jsonRectangles,jsonCutlines,jsonVertCutLines: TJSONArray;
@@ -2382,6 +2385,15 @@ begin
        jsonRectangle.AddPair('FResizable',BoolToStr(FRectangles[i].FResizable));
        jsonRectangle.AddPair('FRotated',BoolToStr(FRectangles[i].FRotated));
        jsonRectangle.AddPair('FrectangleType',IntToStr(ord(FRectangles[i].FrectangleType)));
+
+       jsonNested:= TJSONObject.Create;
+       jsonNested.AddPair('Closthname',FRectangles[i].FRectangleData.ClothName);
+       jsonNested.AddPair('Ordername',FRectangles[i].FRectangleData.OrderName);
+       jsonNested.AddPair('Width',FloatToStr(FRectangles[i].FRectangleData.Width));
+       jsonNested.AddPair('Height',FloatToStr(FRectangles[i].FRectangleData.Height));
+       jsonRectangle.AddPair('RectangleData',jsonNested);
+       jsonNested.Destroy;
+
 
        jsonRectangles.AddElement(jsonRectangle);
        jsonRectangle.Destroy;
@@ -2417,7 +2429,7 @@ begin
 
 
   if FVertCutLines.FCount>0 then begin
-      jsonVertCutLine:=TJSONArray.Create;
+      jsonVertCutLine:=TJSONObject.Create;
 
       for I:= 0 to FVertCutLines.FCount-1 do begin
          jsonVertCutLine:= TJSONObject.Create;
@@ -2425,8 +2437,8 @@ begin
          jsonVertCutLine.AddPair('FName',FVertCutLines[i].FName);
 
          jsonNested:=TJSONObject.Create;
-         jsonNested.AddPair('x',FVertCutLines[i].FBeginPoint.X);
-         jsonNested.AddPair('y',FVertCutLines[i].FBeginPoint.Y);
+         jsonNested.AddPair('x',IntToStr(FVertCutLines[i].FBeginPoint.X));
+         jsonNested.AddPair('y',IntToSTr(FVertCutLines[i].FBeginPoint.Y));
          jsonCutline.AddPair('FBeginPoint',jsonNested);
 
          jsonVertCutLine.AddPair('FLeftOtstup',IntToStr(FVertCutLines[i].FLeftOtstup));
@@ -2439,16 +2451,59 @@ begin
       jsonCutlines.Destroy;
   end;
 
-  Result:=json.ToString;
+  FSerializedSchema:=json.ToString;
+
 
 end;
 
 
-procedure THolstImage.UnSerializeSchema(jsonSchema:string);
-
+procedure THolstImage.UnSerializeSchema();
+var
+  jsonValue :TJSONValue;
+  i, iRectangleIndex:integer;
+  json_Rectangles,json_cutlines,json_vertcutlines:TJsonArray;
+  rectangle:TCustomRectangle;
 begin
-   jsonValue:=TJSONObject.ParseJSONValue(jsonSchema,False,True).AsType;
+   jsonValue:=TJSONObject.ParseJSONValue(FSerializedSchema) as TJsonObject;
 
+
+
+   if jsonValue.TryGetValue('rectangles',json_Rectangles) and (json_rectangles.Count>0) then begin
+      for i := 0 to json_Rectangles.Count-1 do begin
+
+         rectangle:=Frectangles.Add();
+         jsonValue:=json_Rectangles.GetValue<TJSONObject>('FRectangleData');
+         with rectangle.FRectangleData do begin
+            ClothName:= jsonValue.GetValue<string>('ClothNAme');
+            OrderName:= jsonValue.GetValue<string>('OrderName');
+            Width:=     jsonValue.GetValue<Double>('Width');
+            Height:=    jsonValue.GetValue<Double>('Height');
+         end;
+
+         rectangle.FLeftotstup:=            json_Rectangles.GetValue<Integer>('FLeftOtstup');
+         rectangle.FTopOtstup:=             json_Rectangles.GetValue<Integer>('FTopOtstup');
+         rectangle.FLeft:=                  json_Rectangles.GetValue<Integer>('FLeft');
+         rectangle.FRight:=                 json_Rectangles.GetValue<Integer>('FRight');
+         rectangle.FTop:=                   json_Rectangles.GetValue<Integer>('FTop');
+         rectangle.FBottom:=                json_Rectangles.GetValue<Integer>('FBottom');
+         rectangle.FScaledWidth:=           json_Rectangles.GetValue<Double>('FScaledWidth');
+         rectangle.FScaledHeight:=          json_Rectangles.GetValue<Double>('FScaledHeight');
+         rectangle.FResizable:=             json_Rectangles.GetValue<Boolean>('FResizable');
+         rectangle.FRotated:=               json_Rectangles.GetValue<Boolean>('FRotated');
+         rectangle.FrectangleType:=         TRectangleType(json_Rectangles.GetValue<Integer>('FrectangleType'));
+
+
+      end;
+   end;
+
+   if jsonValue.TryGetValue('cutlines',json_cutlines) and (json_cutlines.Count>0) then begin
+     for i := 0 to json_cutlines.Count-1 do
+
+   end;
+
+   if jsonValue.TryGetValue('vertcutlines',json_vertcutlines) and (json_vertcutlines.Count>0)  then begin
+      for i := 0 to json_vertcutlines.Count-1 do
+   end;
 
 end;
 

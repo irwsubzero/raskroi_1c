@@ -352,24 +352,32 @@ begin
                  //frm_main.img_main.Scale:=frm_main.tb_zoom.Position/300;
                  //
 
+                 if FSerializedSchema<>EmptyStr then begin // Если задано свойство сериализованной строки из 1с для компоненты то значения берем оттуда
 
+                       img_main.SerializedSchema:= FSerializedSchema;
+                       img_main.UnSerializeSchema;
 
-                  for i := 0 to FPiecesCount-1 do begin
-                       iRectangleIndex:=img_main.Rectangles.Add(FPieces[i,0],
-                                                        FPieces[i,1],
-                                                        StrToFloat(FPieces[i,2]),
-                                                        StrToFloat(FPieces[i,3]));
-                       img_main.Rectangles[iRectangleIndex].Scale:=img_main.Scale;
-                       img_main.Rectangles[iRectangleIndex].Resizable:=false;
-                       img_main.Rectangles[iRectangleIndex].propLeft:=img_main.Rectangles[iRectangleIndex].propLeft+img_main.ScaledOtstup;
-                       img_main.Rectangles[iRectangleIndex].propTop:=img_main.Rectangles[iRectangleIndex].propTop+img_main.ScaledOtstup;
-                       img_main.Rectangles[iRectangleIndex].propRight:=img_main.Rectangles[iRectangleIndex].propRight+img_main.ScaledOtstup;
-                       img_main.Rectangles[iRectangleIndex].propBottom:=img_main.Rectangles[iRectangleIndex].propBottom+img_main.ScaledOtstup;
-                       img_main.Rectangles[iRectangleIndex].RectangleType:=rtOrder;
-                       
-                       sOrderPieceName:=FPieces[i,2]+' x '+FPieces[i,3]+' ('+FPieces[i,1]+')'; 
-                       frm_main.lb_order_rectangles.AddItem(sOrderPieceName,TObject(img_main.Rectangles[iRectangleIndex]));
- 
+                 end
+                 else begin // иначе заполняем на основе информации из Пула
+
+                      for i := 0 to FPiecesCount-1 do begin
+                           iRectangleIndex:=img_main.Rectangles.Add(FPieces[i,0],
+                                                            FPieces[i,1],
+                                                            StrToFloat(FPieces[i,2]),
+                                                            StrToFloat(FPieces[i,3]));
+                           img_main.Rectangles[iRectangleIndex].Scale:=img_main.Scale;
+                           img_main.Rectangles[iRectangleIndex].Resizable:=false;
+                           img_main.Rectangles[iRectangleIndex].propLeft:=img_main.Rectangles[iRectangleIndex].propLeft+img_main.ScaledOtstup;
+                           img_main.Rectangles[iRectangleIndex].propTop:=img_main.Rectangles[iRectangleIndex].propTop+img_main.ScaledOtstup;
+                           img_main.Rectangles[iRectangleIndex].propRight:=img_main.Rectangles[iRectangleIndex].propRight+img_main.ScaledOtstup;
+                           img_main.Rectangles[iRectangleIndex].propBottom:=img_main.Rectangles[iRectangleIndex].propBottom+img_main.ScaledOtstup;
+                           img_main.Rectangles[iRectangleIndex].RectangleType:=rtOrder;
+
+                           sOrderPieceName:=FPieces[i,2]+' x '+FPieces[i,3]+' ('+FPieces[i,1]+')';
+                           frm_main.lb_order_rectangles.AddItem(sOrderPieceName,TObject(img_main.Rectangles[iRectangleIndex]));
+
+                      end;
+
                   end;
 
                  img_main.ReCalcLeftTopPositionForRectangles;

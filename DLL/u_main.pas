@@ -590,8 +590,8 @@ end;
 
 
 function Tfrm_main.serializedSchema():string;
-var
-   jsonWriter:TJSon
+//var
+   //jsonWriter:TJSon
 begin
 
 end;
