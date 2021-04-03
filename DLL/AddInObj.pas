@@ -381,9 +381,6 @@ begin
                   end;
 
                  img_main.ReCalcLeftTopPositionForRectangles;
-                 // заполняем раскрой
-                 img_main.SerializedSchema:= FSerializedSchema;
-                 img_main.UnSerializeSchema;
 
                  img_main.Draw;
                  if frm_main.ShowModal=mrOK then begin
