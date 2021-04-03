@@ -231,7 +231,7 @@ type
     // function OuterSects(Rect1:TCustomRectangle;Rect:TRect):boolean;
     function OuterSectsContur(Rect1, Rect2: TRect): boolean;
     function _IntersectRect(const Rect1, Rect2: TRect): boolean;
-    procedure SerializeSchema(Value:string);
+
 
   public
     constructor Create(aOwner: TComponent); override;
@@ -295,19 +295,21 @@ type
 
     property DoNotPaintOverCurrentRectangle:boolean read FDoNotPaintOverCurrentRectangle
       write FDoNotPaintOverCurrentRectangle;
-    property SerializedSchema:string read FSerializedSchema write SerializeSchema;
+    property SerializedSchema:string read FSerializedSchema write FSerializedSchema;
 
 
     procedure ReCalcLeftTopPositionForRectangles;
     procedure AutoCalcOriginalHeight;
 
-//    function SerializeSchema:string;
+    procedure SerializeSchema;
     procedure UnSerializeSchema;
   end;
 
 implementation
 
 { TCustomRectangle------------------------------------------------------------- }
+
+uses AddInObj;
 
 constructor TCustomRectangle.Create;
 begin
