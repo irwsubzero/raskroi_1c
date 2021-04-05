@@ -19,6 +19,6 @@ exports
 {$R *.RES}
 
 begin
-
+  ReportMemoryLeaksOnShutdown := True;    //http://mirsovetov.net/show-memory-leek.html
 
 end.

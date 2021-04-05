@@ -2364,7 +2364,6 @@ var
   json,jsonRectangle,jsonCutline,jsonVertCutLine,jsonNested: TJsonObject;
   jsonRectangles,jsonCutlines,jsonVertCutLines: TJSONArray;
   i: integer;
-
 begin
 
    json:= TJSONObject.Create;
@@ -2375,6 +2374,7 @@ begin
     jsonRectangles:= TJSOnArray.Create;
 
     for i := 0 to FRectangles.FCount-1 do begin
+
        jsonRectangle:= TJSONObject.Create;
        jsonRectangle.AddPair('FLeftotstup',IntToStr(FRectangles[i].FLeftotstup));
        jsonRectangle.AddPair('FTopOtstup',IntToStr(FRectangles[i].FTopOtstup));
@@ -2394,15 +2394,15 @@ begin
        jsonNested.AddPair('Width',FloatToStr(FRectangles[i].FRectangleData.Width));
        jsonNested.AddPair('Height',FloatToStr(FRectangles[i].FRectangleData.Height));
        jsonRectangle.AddPair('RectangleData',jsonNested);
-       jsonNested.Destroy;
+       //jsonNested.Free;
 
        jsonRectangles.AddElement(jsonRectangle);
-       jsonRectangle.Destroy;
+       //jsonRectangle;
 
     end;
 
     json.AddPair('rectangles',jsonRectangles);
-    jsonRectangles.Destroy;
+    //jsonRectangles.Free;
   end;
 
   if FCutLines.FCount>0 then begin
@@ -2417,16 +2417,16 @@ begin
          jsonNested.AddPair('x',IntToStr(FCutLines[i].FBeginPoint.X));
          jsonNested.AddPair('y',IntToSTr(FCutLines[i].FBeginPoint.Y));
          jsonCutline.AddPair('FBeginPoint',jsonNested);
-         //jsonNested.Destroy;
+         jsonNested.Destroy;
 
          jsonCutline.AddPair('FTopOtstup',IntToStr(FCutLines[i].FTopOtstup));
 
          jsonCutlines.AddElement(jsonCutline);
-         jsonCutline.Destroy;
+         //jsonCutline.Destroy;
       end;
 
       json.AddPair('cutlines',jsonCutline);
-      jsonCutlines.Destroy;
+      //jsonCutlines.Destroy;
   end;
 
 
@@ -2442,6 +2442,7 @@ begin
          jsonNested.AddPair('x',IntToStr(FVertCutLines[i].FBeginPoint.X));
          jsonNested.AddPair('y',IntToSTr(FVertCutLines[i].FBeginPoint.Y));
          jsonCutline.AddPair('FBeginPoint',jsonNested);
+         jsonNested.Destroy;
 
          jsonVertCutLine.AddPair('FLeftOtstup',IntToStr(FVertCutLines[i].FLeftOtstup));
 
@@ -2450,12 +2451,12 @@ begin
       end;
 
       json.AddPair('cutlines',jsonCutline);
-      jsonCutlines.Destroy;
+      //jsonCutlines.Destroy;
   end;
 
-  FSerializedSchema:=json.ToString;
+  FSerializedSchema:=json.ToJson;
 
-  json.Destroy;
+  json.Free;
 
 end;
 
