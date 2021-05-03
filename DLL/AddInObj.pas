@@ -348,7 +348,7 @@ begin
                  frm_main:=Tfrm_main.Create(nil);
                  frm_main.edt_width.Text:=FloatToStr(FOriginalWidth);
                  img_main.OriginalWidth:=FOriginalWidth;
-                 frm_main.lbl_materialname.Caption:=FMaterial; 
+                 frm_main.lbl_materialname.Caption:=FMaterial;
                  //frm_main.img_main.Scale:=frm_main.tb_zoom.Position/300;
                  //
 
@@ -356,6 +356,19 @@ begin
 
                        img_main.SerializedSchema:= FSerializedSchema;
                        img_main.UnSerializeSchema;
+
+                       for I:=0 to img_main.Rectangles.Count-1 do
+                         case img_main.Rectangles[i].RectangleType of
+                           rtUseFul: frm_main.lb_useful_rectangles.Items.addObject(img_main.Rectangles[i].Name,TObject(img_main.Rectangles[i]));
+                           rtOrder:  frm_main.lb_order_rectangles.Items.addObject(img_main.Rectangles[i].Name,TObject(img_main.Rectangles[i]));
+                         end;
+
+                       for I := 0 to img_main.Cutlines.Count-1 do
+                          frm_main.lb_cutlines.Items.AddObject(img_main.Cutlines[i].Name,TObject(img_main.Cutlines[i]));
+                       for I := 0 to img_main.VertCutlines.Count-1 do
+                          frm_main.lb_vertcutlines.Items.AddObject(img_main.VertCutlines[i].Name,TObject(img_main.VertCutlines[i]));
+
+
 
                  end
                  else begin // иначе заполняем на основе информации из Пула
@@ -383,6 +396,7 @@ begin
                  img_main.ReCalcLeftTopPositionForRectangles;
 
                  img_main.Draw;
+
                  if frm_main.ShowModal=mrOK then begin
                     // 19.01.2019 Не закрашивать текущий прямоугольник
                     img_main.DoNotPaintOverCurrentRectangle:=false;

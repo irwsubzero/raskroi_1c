@@ -78,6 +78,7 @@ type
     action_delete_vertcutline: TAction;
     action_auto_height: TAction;
     tb_autoheight: TToolButton;
+    sv_dialog: TSaveDialog;
 
 
     procedure btn_doClick(Sender: TObject);
@@ -361,7 +362,8 @@ end;
 procedure Tfrm_main.tb_saveimageClick(Sender: TObject);
 begin
    if img_main.Picture<>nil  then
-     img_main.Picture.SaveToFile('Holst.jpg');
+     //if sv_dialog.Create then     
+        img_main.Picture.SaveToFile('Holst.jpg');
 end;
 
 procedure Tfrm_main.tb_showRectanglesInfoClick(Sender: TObject);
