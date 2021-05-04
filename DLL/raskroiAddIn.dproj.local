@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <BorlandProject>
 	<Transactions>
-    <Transaction>1899.12.30 00:00:00.000.882,=C:\Users\SubZero\Documents\Embarcadero\Studio\Projects\Project1_TLB.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.935,C:\Users\SubZero\Documents\Embarcadero\Studio\Projects\Project1.dproj=K:\YandexDisk\DELPHI\For Jaluzi\Raskroi_1c\dll3\raskroiAddIn.dproj</Transaction>
     <Transaction>1899.12.30 00:00:00.000.872,=C:\Users\SubZero\Documents\Embarcadero\Studio\Projects\Project1.ridl</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.935,K:\YandexDisk\DELPHI\For Jaluzi\Raskroi_1c\dll3\raskroiAddIn.dproj=C:\Users\SubZero\Documents\Embarcadero\Studio\Projects\Project1.dproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.882,=C:\Users\SubZero\Documents\Embarcadero\Studio\Projects\Project1_TLB.pas</Transaction>
   </Transactions>
 </BorlandProject>

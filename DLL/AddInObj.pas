@@ -350,7 +350,7 @@ begin
                  img_main.OriginalWidth:=FOriginalWidth;
                  frm_main.lbl_materialname.Caption:=FMaterial;
                  //frm_main.img_main.Scale:=frm_main.tb_zoom.Position/300;
-                 //
+
 
                  if FSerializedSchema<>EmptyStr then begin // Если задано свойство сериализованной строки из 1с для компоненты то значения берем оттуда
 
@@ -368,10 +368,11 @@ begin
                        for I := 0 to img_main.VertCutlines.Count-1 do
                           frm_main.lb_vertcutlines.Items.AddObject(img_main.VertCutlines[i].Name,TObject(img_main.VertCutlines[i]));
 
+                       frm_main.edt_height.Text:=FloatToStr(img_main.OriginalHeight);
 
 
                  end
-                 else begin // иначе заполняем на основе информации из Пула
+                 else begin // иначе заполняем на основе информации из Пула   }
 
                       for i := 0 to FPiecesCount-1 do begin
                            iRectangleIndex:=img_main.Rectangles.Add(FPieces[i,0],
@@ -391,7 +392,7 @@ begin
 
                       end;
 
-                  end;
+                 end;
 
                  img_main.ReCalcLeftTopPositionForRectangles;
 

@@ -2164,6 +2164,8 @@ begin
   v_originalheight:=RoundTo((maxrectanglebottom-FScaledOtstup)/1000/FScale,-2);
   SetHeight(v_originalheight);
 
+  OriginalWidth:= v_originalheight;
+
 end;
 
 procedure THolstImage.CreateRandomRectangles;
@@ -2320,7 +2322,7 @@ end;
 
 function THolstImage._IntersectRect(const Rect1, Rect2: TRect): boolean;
 begin
-  Result := (Rect1.Left <= Rect2.Right) and (Rect1.Right >= Rect2.Left) and
+  Result:= (Rect1.Left <= Rect2.Right) and (Rect1.Right >= Rect2.Left) and
     (Rect1.Top <= Rect2.Bottom) and (Rect1.Bottom >= Rect2.Top);
 end;
 
@@ -2363,7 +2365,7 @@ procedure THolstImage.serializeSchema;
 var
   json,jsonRectangle,jsonCutline,jsonVertCutLine,jsonNested: TJsonObject;
   jsonRectangles,jsonCutlines,jsonVertCutLines: TJSONArray;
-  i,LeftOtstup,TopOtstup,toppos:integer;
+  i{,LeftOtstup,TopOtstup}:integer;
 
 begin
 
@@ -2372,6 +2374,7 @@ begin
 
    json:= TJSONObject.Create;
 
+   json.AddPair('OriginalHeight',TJsonNumber.Create(FOriginalHeight));
 
   if FRectangles.Count>0 then begin
 
@@ -2379,20 +2382,14 @@ begin
 
     for i := 0 to FRectangles.FCount-1 do begin
 
-      LeftOtstup:= round((FRectangles[i].FLeft) / FScale);
-      TopOtstup := round((FRectangles[i].FTop) / FScale);
+      //LeftOtstup:= round((FRectangles[i].FLeft) / FScale);
+      //TopOtstup := round((FRectangles[i].FTop) / FScale);
 
 
        jsonRectangle:= TJSONObject.Create;
        jsonRectangle.AddPair('FLeftOtstup',TJsonNumber.create(FRectangles[i].FLeftotstup));
        jsonRectangle.AddPair('FTopOtstup',TJsonNumber.Create(FRectangles[i].FTopOtstup));
        jsonRectangle.AddPair('FName',FRectangles[i].FName);
-//       jsonRectangle.AddPair('FLeft',TJsonNumber.Create(FRectangles[i].FLeft));
-//       jsonRectangle.AddPair('FRight',TJsonNumber.Create(FRectangles[i].FRight));
-//       jsonRectangle.AddPair('FTop',TJsonNumber.Create(FRectangles[i].FTop));
-//       jsonRectangle.AddPair('FBottom',TJSONNumber.Create(FRectangles[i].FBottom));
-//       jsonRectangle.AddPair('FScaledWidth',TJsonNumber.Create(FRectangles[i].FScaledWidth));
-//       jsonRectangle.AddPair('FScaledHeight',TJSONNumber.Create(FRectangles[i].FScaledHeight));
        jsonRectangle.AddPair('FResizable',TJSONBool.Create(FRectangles[i].FResizable));
        jsonRectangle.AddPair('FRotated',TJsonBool.Create(FRectangles[i].FRotated));
        jsonRectangle.AddPair('FrectangleType',TJsonNumber.Create(ord(FRectangles[i].FrectangleType)));
@@ -2406,8 +2403,6 @@ begin
        //jsonNested.Free;
 
        jsonRectangles.AddElement(jsonRectangle);
-       //jsonRectangle;
-
     end;
 
     json.AddPair('rectangles',jsonRectangles);
@@ -2423,20 +2418,12 @@ begin
          jsonCutline.AddPair('FName',FCutLines[i].FName);
          jsonCutline.AddPair('FTopOtstup',TJSONNumber.Create(FCutLines[i].FTopOtstup)); // основна€ информаци€ дл€ сохранени€ , остальное не нужно
 
-//         jsonNested:=TJSONObject.Create;
-//         jsonNested.AddPair('x',TJSONNumber.Create(FCutLines[i].FBeginPoint.X));
-//         jsonNested.AddPair('y',TJSONNumber.Create(FCutLines[i].FBeginPoint.Y));
-//         jsonCutline.AddPair('FBeginPoint',jsonNested);
-         //jsonNested.Destroy;
-
-
-
          jsonCutlines.AddElement(jsonCutline);
          //jsonCutline.Destroy;
       end;
 
       json.AddPair('cutlines',jsonCutlines);
-      //jsonCutlines.Destroy;
+     // jsonCutlines.Destroy;
   end;
 
 
@@ -2449,14 +2436,6 @@ begin
          jsonVertCutLine.AddPair('FName',FVertCutLines[i].FName);
          jsonVertCutLine.AddPair('FLeftOtstup',TJsonNUmber.Create(FVertCutLines[i].FLeftOtstup));
 
-//         jsonNested:=TJSONObject.Create;
-//         jsonNested.AddPair('x',TJSONNumber.Create(FVertCutLines[i].FBeginPoint.X));
-//         jsonNested.AddPair('y',TJsonNUmber.Create(FVertCutLines[i].FBeginPoint.Y));
-//         jsonVertCutline.AddPair('FBeginPoint',jsonNested);
-         //jsonNested.Destroy;
-
-
-
          jsonVertCutLines.AddElement(jsonVertCutline);
          //jsonVertCutLines.Destroy;
       end;
@@ -2467,15 +2446,16 @@ begin
 
   FSerializedSchema:=json.ToJson;
 
-  json.Free;
+
+  FreeAndNil(json);
 
 end;
 
 
 procedure THolstImage.UnSerializeSchema();
 var
-  jsonValue,jsonRectangleValue{,jsonCutline,jsonVertCutLine}:TJSONValue;
-  i,iRectangleIndex:integer;
+  jsonValue,jsonRectangleValue,jsonOriginalHeight:TJSONValue;
+  i:integer;
   json_Rectangles,
   json_cutlines,
   json_vertcutlines:TJsonArray;
@@ -2484,9 +2464,16 @@ var
   cutline:TCustomCutLine;
   vertcutline:TCustomVertCutLine;
   topOtstup,leftOtstup : integer;
+
 begin
 
    jsonValue:=TJSONObject.ParseJSONValue(FSerializedSchema) as TJsonObject;
+
+   if jsonValue.TryGetValue('OriginalHeight',jsonOriginalHeight) then begin
+      OriginalHeight:=StrToFloat(jsonOriginalHeight.Value);
+      FreeAndNil(jsonOriginalHeight);
+   end;
+
 
    if jsonValue.TryGetValue('rectangles',json_Rectangles) and (json_rectangles.Count>0) then begin
       for i := 0 to json_Rectangles.Count-1 do begin
@@ -2505,20 +2492,19 @@ begin
          rectangle.FTopOtstup:=             json_Rectangles.Items[i].GetValue<Integer>('FTopOtstup');
          rectangle.FLeft:=                  round(rectangle.FLeftotstup*FScale);
          rectangle.FTop:=                   round(rectangle.FTopOtstup*FScale);
-         //rectangle.FRight:=                 FScale * (rectangle.FRectangleData.Width * 1000); // 1000 вз€то из компоненты , фиксированна€ константа
-         //rectangle.FBottom:=                FScale * (rectangle.FRectangleData.Height * 1000);
          rectangle.FResizable:=             json_Rectangles.Items[i].GetValue<Boolean>('FResizable');
          rectangle.FRotated:=               json_Rectangles.Items[i].GetValue<Boolean>('FRotated');
          rectangle.FrectangleType:=         TRectangleType(json_Rectangles.Items[i].GetValue<Integer>('FrectangleType'));
          rectangle.Scale:=                  FScale;  // здесь идет расчет FRight и FBottom
 
+         //FreeAndNil(jsonRectangleValue);
       end;
    end;
 
    if jsonValue.TryGetValue('cutlines',json_cutlines) and (json_cutlines.Count>0) then begin
      for i:=0 to json_cutlines.Count-1 do begin
 
-        //jsonCutline:=json_cutlines.Items[i].GetValue<TJsonObject>('FBeginPoint');
+
         topOtstup:=json_cutlines.Items[i].GetValue<Integer>('FTopOtstup');
         point:=TPoint.Create(FScaledOtstup,round(topOtstup * FScale));
         cutline:= FCutLines.Add(point);
@@ -2526,22 +2512,24 @@ begin
         cutline.FTopOtstup:=topOtstup; // основна€ информаци€
      end;
 
+     //FreeAndNil(json_cutlines);
    end;
 
    if jsonValue.TryGetValue('vertcutlines',json_vertcutlines) and (json_vertcutlines.Count>0)  then begin
       for i := 0 to json_vertcutlines.Count-1 do  begin
 
-
-        //jsonVertCutLine:=json_vertcutlines.Items[i].GetValue<TJSONObject>('FBeginPoint');       
-        leftOtstup:=json_vertcutlines.Items[i].GetValue<Integer>('FLeftOtstup');        
+        leftOtstup:=json_vertcutlines.Items[i].GetValue<Integer>('FLeftOtstup');
         point:=TPoint.Create(round(leftOtstup * FScale),FScaledOtstup);
-        vertcutline:= FVertCutLines.Add(point);  
+        vertcutline:= FVertCutLines.Add(point);
         vertcutline.FName:= json_vertcutlines.Items[i].GetValue<string>('FName') ;
         vertcutline.FLeftOtstup:= leftOtstup;
-        
 
       end;
+      //FreeAndNil(json_vertcutlines);
    end;
+
+
+   FreeAndNil(jsonValue);
 
 end;
 

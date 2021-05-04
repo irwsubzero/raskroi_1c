@@ -110,12 +110,13 @@ type
     procedure action_add_vertcutlineExecute(Sender: TObject);
     procedure btn_delete_vert_cutlineClick(Sender: TObject);
     procedure action_auto_heightExecute(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
 
   private
     { Private declarations }
     procedure OnAddCutLine(var Msg: TMessage); message WM_ADDCUTLINE_MSG;
     procedure OnAddVertCutLine(var Msg:TMessage); message WM_ADDVERTCUTLINE_MSG;
-
+    procedure FreeObjects(const AStrings: TStrings);
   public
     { Public declarations }
 
@@ -159,12 +160,39 @@ begin
 
 end;
 
-
 procedure Tfrm_main.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
 //   if img_main<>nil  then
 //     FreeAndNil(img_main);
+
 end;
+
+
+procedure Tfrm_main.FreeObjects(const AStrings: TStrings);  //http://mirsovetov.net/tstrings-free-object.html
+var
+  I : Integer;
+  Obj: TObject;
+begin
+   for I := 0 to Pred(AStrings.Count) do begin
+     Obj := AStrings.Objects[I];
+     if Assigned(Obj) then
+       FreeAndNil(Obj);
+   end;
+end;
+
+
+procedure Tfrm_main.FormDestroy(Sender: TObject);
+begin
+   if lb_useful_rectangles.Items.Count>0 then
+      FreeObjects(lb_useful_rectangles.Items);
+   if lb_order_rectangles.Items.Count>0 then
+      FreeObjects(lb_order_rectangles.Items);
+   if lb_cutlines.Items.Count>0 then
+      FreeObjects(lb_cutlines.Items);
+    if lb_vertcutlines.Items.Count>0 then
+      FreeObjects(lb_vertcutlines.Items);
+end;
+
 
 procedure Tfrm_main.CalcMaterials;
 var
