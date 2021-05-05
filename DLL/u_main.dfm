@@ -61,7 +61,7 @@ object frm_main: Tfrm_main
       Left = 945
       Top = 1
       Width = 143
-      Height = 23
+      Height = 39
       Align = alRight
       Caption = 'lbl_materialname'
       Font.Charset = DEFAULT_CHARSET
@@ -70,6 +70,7 @@ object frm_main: Tfrm_main
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentFont = False
+      ExplicitHeight = 23
     end
     object edt_width: TEdit
       Left = 81
@@ -324,6 +325,7 @@ object frm_main: Tfrm_main
     Left = 889
     Top = 83
     Height = 670
+    VertScrollBar.Position = 162
     VertScrollBar.Tracking = True
     Align = alRight
     HeaderFont.Charset = DEFAULT_CHARSET
@@ -333,10 +335,9 @@ object frm_main: Tfrm_main
     HeaderFont.Style = []
     TabOrder = 7
     object catpnl_vertcutlines: TCategoryPanel
-      Top = 630
+      Top = 468
       Caption = #1042#1077#1088#1090'. '#1083#1080#1085#1080#1080' '#1086#1090#1088#1077#1079#1072
       TabOrder = 0
-      ExplicitWidth = 198
       object lb_vertcutlines: TListBox
         Left = 0
         Top = 0
@@ -359,7 +360,6 @@ object frm_main: Tfrm_main
           Width = 34
           Height = 25
           Action = action_delete_vertcutline
-          Caption = 'action_delete_vertcutline'
           Glyph.Data = {
             06030000424D06030000000000003600000028000000100000000F0000000100
             180000000000D0020000000000000000000000000000000000000E0084050080
@@ -395,7 +395,6 @@ object frm_main: Tfrm_main
           Width = 29
           Height = 25
           Action = action_add_vertcutline
-          Caption = 'action_add_vertcutline'
           Glyph.Data = {
             06030000424D06030000000000003600000028000000100000000F0000000100
             180000000000D002000000000000000000000000000000000000FFFFFFFFFFFF
@@ -427,10 +426,9 @@ object frm_main: Tfrm_main
       end
     end
     object catpnl_cutlines: TCategoryPanel
-      Top = 430
+      Top = 268
       Caption = #1043#1086#1088#1080#1079'. '#1083#1080#1085#1080#1080' '#1086#1090#1088#1077#1079#1072
       TabOrder = 1
-      ExplicitWidth = 198
       object pnl_cutlines: TPanel
         Left = 0
         Top = 144
@@ -518,10 +516,9 @@ object frm_main: Tfrm_main
       end
     end
     object catpnl_OrderPieces: TCategoryPanel
-      Top = 230
+      Top = 68
       Caption = #1050#1091#1089#1082#1080#1048#1079#1047#1072#1082#1072#1079#1086#1074
       TabOrder = 2
-      ExplicitWidth = 198
       object lb_order_rectangles: TListBox
         Left = 0
         Top = 0
@@ -533,10 +530,9 @@ object frm_main: Tfrm_main
       end
     end
     object catpnl_useful: TCategoryPanel
-      Top = 30
+      Top = -132
       Caption = #1055#1086#1083#1077#1079#1085#1099#1077' '#1082#1091#1089#1082#1080
       TabOrder = 3
-      ExplicitWidth = 198
       object Panel1: TPanel
         Left = 0
         Top = 144
@@ -624,14 +620,13 @@ object frm_main: Tfrm_main
       end
     end
     object catpnl_defect: TCategoryPanel
-      Top = 0
+      Top = -162
       Height = 30
       Caption = #1047#1072#1073#1088#1072#1082#1086#1074#1086#1085#1085#1099#1077' '#1082#1091#1089#1082#1080
       Collapsed = True
       Enabled = False
       TabOrder = 4
       Visible = False
-      ExplicitWidth = 198
       object pnl_defect: TPanel
         Left = 0
         Top = -30
@@ -742,11 +737,9 @@ object frm_main: Tfrm_main
       OnExecute = action_delete_cutlineExecute
     end
     object action_add_vertcutline: TAction
-      Caption = 'action_add_vertcutline'
       OnExecute = action_add_vertcutlineExecute
     end
     object action_delete_vertcutline: TAction
-      Caption = 'action_delete_vertcutline'
     end
     object action_auto_height: TAction
       Caption = 'action_auto_height'

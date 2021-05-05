@@ -88,8 +88,8 @@
         <Debugger_CWD>C:\Users\1\Desktop\Заур_Временная\Raskroi_1c\Raskroi_1c\DLL</Debugger_CWD>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win64)'!=''">
-        <Debugger_HostApplication>C:\Program Files\1cv8\8.3.18.1289\bin\1cv8c.exe</Debugger_HostApplication>
-        <Debugger_CWD>C:\work1c\Delphi\temp</Debugger_CWD>
+        <Debugger_HostApplication>C:\Program Files\1cv8\8.3.11.2867\bin\1cv8c.exe</Debugger_HostApplication>
+        <Debugger_CWD>C:\Users\1\Desktop\Заур_Временная\Raskroi_1c\Raskroi_1c\DLL</Debugger_CWD>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
         <DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>

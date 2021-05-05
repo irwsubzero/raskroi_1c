@@ -2161,10 +2161,11 @@ begin
          maxrectanglebottom:=FRectangles[i].FBottom;
     end;
 
-  v_originalheight:=RoundTo((maxrectanglebottom-FScaledOtstup)/1000/FScale,-2);
-  SetHeight(v_originalheight);
+//  v_originalheight:=RoundTo((maxrectanglebottom-FScaledOtstup)/1000/FScale,-2);
+//  SetHeight(v_originalheight);
 
-  OriginalWidth:= v_originalheight;
+  //OriginalWidth:= v_originalheight;
+   OriginalHeight:= RoundTo((maxrectanglebottom-FScaledOtstup)/1000/FScale,-2);
 
 end;
 
@@ -2365,12 +2366,9 @@ procedure THolstImage.serializeSchema;
 var
   json,jsonRectangle,jsonCutline,jsonVertCutLine,jsonNested: TJsonObject;
   jsonRectangles,jsonCutlines,jsonVertCutLines: TJSONArray;
-  i{,LeftOtstup,TopOtstup}:integer;
+  i:integer;
 
 begin
-
-//   FormatSettings:=TFormatSettings.Create();
-//   FormatSettings.DecimalSeparator:='.';
 
    json:= TJSONObject.Create;
 
@@ -2382,10 +2380,7 @@ begin
 
     for i := 0 to FRectangles.FCount-1 do begin
 
-      //LeftOtstup:= round((FRectangles[i].FLeft) / FScale);
-      //TopOtstup := round((FRectangles[i].FTop) / FScale);
-
-
+      
        jsonRectangle:= TJSONObject.Create;
        jsonRectangle.AddPair('FLeftOtstup',TJsonNumber.create(FRectangles[i].FLeftotstup));
        jsonRectangle.AddPair('FTopOtstup',TJsonNumber.Create(FRectangles[i].FTopOtstup));

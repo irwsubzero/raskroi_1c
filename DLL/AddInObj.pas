@@ -354,8 +354,8 @@ begin
 
                  if FSerializedSchema<>EmptyStr then begin // Если задано свойство сериализованной строки из 1с для компоненты то значения берем оттуда
 
-                       img_main.SerializedSchema:= FSerializedSchema;
-                       img_main.UnSerializeSchema;
+                      img_main.SerializedSchema:= FSerializedSchema;
+                      img_main.UnSerializeSchema;
 
                        for I:=0 to img_main.Rectangles.Count-1 do
                          case img_main.Rectangles[i].RectangleType of
@@ -368,11 +368,11 @@ begin
                        for I := 0 to img_main.VertCutlines.Count-1 do
                           frm_main.lb_vertcutlines.Items.AddObject(img_main.VertCutlines[i].Name,TObject(img_main.VertCutlines[i]));
 
-                       frm_main.edt_height.Text:=FloatToStr(img_main.OriginalHeight);
+                       frm_main.edt_height.Text:=FloatToStr(img_main.OriginalHeight);   
 
 
                  end
-                 else begin // иначе заполняем на основе информации из Пула   }
+                 else begin // иначе заполняем на основе информации из Пула   
 
                       for i := 0 to FPiecesCount-1 do begin
                            iRectangleIndex:=img_main.Rectangles.Add(FPieces[i,0],
@@ -416,16 +416,19 @@ begin
                     img_main.Draw;
 
                     pngImage:=TPngImage.Create;
-                    pngImage.Assign(img_main.Picture.Bitmap);
+                    pngImage.Assign(img_main.Picture.Bitmap);                   
                     //сохраняем данные в строку
                     FImageData:='';
                     stImageData:=TStringStream.Create;
-                    pngImage.SaveToStream(stImageData);
-                    stImageData.Position:=0;
-                    FImageData:= stImageData.ReadString(stImageData.Size);
+                    try  
+                      pngImage.SaveToStream(stImageData);
+                      stImageData.Position:=0;
+                      FImageData:= stImageData.ReadString(stImageData.Size);
+                    finally
                     // отчищаем созданные классы
-                    FreeAndNil(pngImage);
-                    FreeAndNil(stImageData);
+                      FreeAndNil(pngImage);
+                      FreeAndNil(stImageData);
+                    end;
 
                     FDefectArea:=DefectArea;
 
@@ -436,30 +439,34 @@ begin
                     pvarRetValue:=True;
                  end
                  else
-                  pvarRetValue:=false;
+                   pvarRetValue:=false;
               end;
             finally
               if img_main<>nil then
-                 FreeAndNil(img_main);
-              if frm_main<>nil then
-                 FreeAndNil(frm_main);
+                FreeAndNil(img_main);
+              if frm_main <> nil then
+                FreeAndNil(frm_main);
               CallAsFunc := S_OK;
             end;
 
           end;
-          meth2:; //vk_object.meth2(m_execute);
-          meth3:; //vk_object.meth3(m_execute);
-          meth4:; //vk_object.meth4(m_execute);
-          meth5:; //vk_object.meth5(m_execute)
-          (*7*)
+        meth2:
+          ; // vk_object.meth2(m_execute);
+        meth3:
+          ; // vk_object.meth3(m_execute);
+        meth4:
+          ; // vk_object.meth4(m_execute);
+        meth5:
+          ; // vk_object.meth5(m_execute)
+        (* 7 *)
 
-
-          else begin
-               CallAsFunc := S_FALSE;
-               Exit;
-               end;
-          end; //case
-          //pvarRetValue := false;
+      else
+        begin
+          CallAsFunc := S_FALSE;
+          Exit;
+        end;
+      end; // case
+      // pvarRetValue := false;
 
 //          if vk_object.g_Event<>'' then begin
 //            iEvent.ExternalEvent(c_AddinName, vk_object.g_Event, vk_object.g_Event_Data);
@@ -527,7 +534,7 @@ begin
      plParams:=0;
      case TMethods(lMethodNum) of
           methOpen: begin
-                      plParams:=0;
+               plParams:=0;
           end;
           meth2: begin
                    {vk_object.meth2(m_n_params)};

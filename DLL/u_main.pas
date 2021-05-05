@@ -123,7 +123,7 @@ type
     Pieces: array of TRectangleData;
     json_schema: string;
     procedure CalcMaterials;
-    function serializedSchema():string;
+  
   end;
 
 
@@ -164,7 +164,14 @@ procedure Tfrm_main.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
 //   if img_main<>nil  then
 //     FreeAndNil(img_main);
-
+//   if lb_useful_rectangles.Items.Count>0 then
+//      FreeObjects(lb_useful_rectangles.Items);
+//   if lb_order_rectangles.Items.Count>0 then
+//      FreeObjects(lb_order_rectangles.Items);
+//   if lb_cutlines.Items.Count>0 then
+//      FreeObjects(lb_cutlines.Items);
+//    if lb_vertcutlines.Items.Count>0 then
+//      FreeObjects(lb_vertcutlines.Items);
 end;
 
 
@@ -183,14 +190,14 @@ end;
 
 procedure Tfrm_main.FormDestroy(Sender: TObject);
 begin
-   if lb_useful_rectangles.Items.Count>0 then
-      FreeObjects(lb_useful_rectangles.Items);
-   if lb_order_rectangles.Items.Count>0 then
-      FreeObjects(lb_order_rectangles.Items);
-   if lb_cutlines.Items.Count>0 then
-      FreeObjects(lb_cutlines.Items);
-    if lb_vertcutlines.Items.Count>0 then
-      FreeObjects(lb_vertcutlines.Items);
+//   if lb_useful_rectangles.Items.Count>0 then
+//      FreeObjects(lb_useful_rectangles.Items);
+//   if lb_order_rectangles.Items.Count>0 then
+//      FreeObjects(lb_order_rectangles.Items);
+//   if lb_cutlines.Items.Count>0 then
+//      FreeObjects(lb_cutlines.Items);
+//    if lb_vertcutlines.Items.Count>0 then
+//      FreeObjects(lb_vertcutlines.Items);
 end;
 
 
@@ -619,11 +626,6 @@ begin
 end;
 
 
-function Tfrm_main.serializedSchema():string;
-//var
-   //jsonWriter:TJSon
-begin
 
-end;
 
 end.
