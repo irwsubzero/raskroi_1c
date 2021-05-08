@@ -771,7 +771,7 @@ var
   current: integer;
 begin
   If FCount <= 0 then
-    Exit;
+    Exit ;
   FreeAndNil(Fitems[Index]);
   for current := index + 1 to FCount - 1 do
   begin
@@ -816,7 +816,7 @@ end;
 var
   i: integer;
   // oldWidth, oldHeight: integer;
-  oldScale: double;
+//  oldScale: double;
 
 begin
   // oldWidth := Width;
@@ -1276,8 +1276,7 @@ begin
 end;
 
 procedure THolstImage.SetTool(ATool: TTool);
-var
-  i: integer;
+
 begin
   FTool := ATool;
 
@@ -1524,7 +1523,7 @@ end;
 procedure THolstImage.MoveToolMouseUp(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X: integer; Y: integer);
 var
-  i: integer;
+//  i: integer;
   leftpos, toppos: integer;
 begin
   // Двигание прямоугольных примитивов
@@ -1551,7 +1550,7 @@ end;
 procedure THolstImage.ResizeToolMouseMove(Sender: TObject; Shift: TShiftState;
   X: integer; Y: integer);
 var
-  i: integer;
+//  i: integer;
   newWidth, newHeight: double;
 begin
 
@@ -1703,7 +1702,7 @@ procedure THolstImage.ResizeToolMouseUp(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X: integer; Y: integer);
 var
   newWidth, newHeight: double;
-  i: integer;
+//  i: integer;
 begin
 
   if FActiveRectangleIndex > -1 then
@@ -1871,8 +1870,7 @@ end;
 
 procedure THolstImage.CutLineToolMouseMove(Sender: TObject; Shift: TShiftState;
   X: integer; Y: integer);
-var
-  i: integer;
+
 begin
 
   if (Y >= FScaledOtstup) and (Y <= Height - FScaledOtstup) and
@@ -1892,10 +1890,9 @@ end;
 
 procedure THolstImage.CutLineToolMouseUp(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X: integer; Y: integer);
-var
-  doDrag: boolean;
-  i: integer;
-  toppos: integer;
+//var
+//  doDrag: boolean;
+//  toppos: integer;
 begin
   //toppos := round((FCutLines[FCutLines.Count - 1].FBeginPoint.Y) / FScale);
 //  toppos:=round(Y/FScale);
@@ -1958,7 +1955,6 @@ procedure THolstImage.MoveCutLineToolMouseUp(Sender: TObject;
   Button: TMouseButton; Shift: TShiftState; X: integer; Y: integer);
 var
   doDrag: boolean;
-  i: integer;
   old_toppos,toppos: integer;
 begin
   // Двигание линий отреза
@@ -2028,8 +2024,7 @@ end;
 
 procedure THolstImage.VertCutLineToolMouseMove(Sender: TObject; Shift: TShiftState;
       X, Y: integer);
-var
-  i: integer;
+
 begin
 
   if (Y >= FScaledOtstup) and (Y <= Height - FScaledOtstup) and
@@ -2106,7 +2101,7 @@ procedure THolstImage.MoveVertCutLineToolMouseUp(Sender: TObject; Button: TMouse
       Shift: TShiftState; X, Y: integer);
 var
   doDrag: boolean;
-  i: integer;
+
   old_leftpos,leftpos: integer;
 begin
   // Двигание линий отреза
@@ -2152,7 +2147,7 @@ procedure THolstImage.AutoCalcOriginalHeight;
 var
   i:integer;
   maxrectanglebottom:integer;
-  v_originalheight:double;
+
 begin
    maxrectanglebottom:=-1;
   if FRectangles.Count > 0 then
@@ -2161,10 +2156,6 @@ begin
          maxrectanglebottom:=FRectangles[i].FBottom;
     end;
 
-//  v_originalheight:=RoundTo((maxrectanglebottom-FScaledOtstup)/1000/FScale,-2);
-//  SetHeight(v_originalheight);
-
-  //OriginalWidth:= v_originalheight;
    OriginalHeight:= RoundTo((maxrectanglebottom-FScaledOtstup)/1000/FScale,-2);
 
 end;

@@ -79,14 +79,14 @@ type
 
     //ѕеременна€ объекта внешней компоненты
     //vk_object: T_vk_object;
-     FMaterial:string;
+     FMaterial:Widestring;  // ≈сли использовать string то утечки пам€ти при передаче значений свойствам
      FOriginalWidth,FOriginalHeight:double;
-     FPieces:array of array [0..3] of string; // массив где будет хранитьс€ переданные через свойство данные
+     FPieces:array of array [0..3] of Widestring; // массив где будет хранитьс€ переданные через свойство данные
      FPiecesCount:integer;
-     FImageData:string;
+     FImageData:Widestring;
      FDefectArea:double; // ѕлощадь бракованной области
      //FUseFulPieces:TRectangles;
-     FSerializedSchema:string;
+     FSerializedSchema:WideString;
 
     { This function is useful in ILanguageExtender implementation }
 		function TermString(strTerm: string; iAlias: Integer): string;
@@ -179,7 +179,7 @@ function AddInObject.GetPropVal(lPropNum: Integer; var pvarPropVal: OleVariant):
 
 //«десь 1— читает значени€ свойств
 var
-  i,j:integer;
+  i:integer;
   iPiecesUseFulCount,iPiecesDefectCount,iPiecesOrdersCount:integer;
 begin
      //VarClear(vk_object.g_Value);
@@ -266,8 +266,8 @@ function AddInObject.SetPropVal(
   ): HResult; stdcall;
 
 var
-   pArray,pArray1:PSafeArray;
-   i,j,iLow, iHigh : Integer;
+   pArray:PSafeArray;
+   i,iLow, iHigh : Integer;
    iIndexes:array [0..1] of integer;
    value:WideString;
 begin
@@ -332,7 +332,6 @@ function AddInObject.CallAsFunc(lMethodNum: Integer; var pvarRetValue: OleVarian
 var
   i:integer;
   iRectangleIndex:integer;
-  Height:Double;
   pngImage: TPngImage;
 	stImageData: TStringStream;
   sOrderPieceName:string;
@@ -479,7 +478,7 @@ begin
      end;
 
 
-     //CallAsFunc := S_OK;
+   //  CallAsFunc := S_OK;
 end;
 
 ////////////////////////////////////////////////////////////////////////
